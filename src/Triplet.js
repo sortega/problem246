@@ -31,13 +31,15 @@ class Triplet extends Component {
 
     render() { 
         return (<div className="triplet">
-            <input name="t1" value={this.state.triplet[0]} onChange={e => this.handleChange(e, 0)}/>
-            <input name="t2" value={this.state.triplet[1]} onChange={e => this.handleChange(e, 1)}/>
-            <input name="t3" value={this.state.triplet[2]} onChange={e => this.handleChange(e, 2)}/>
-            
             {this.state.tested 
-            ? <span>{ this.currentTripletIsAwesome() ? "it's AWESOME!" : "it's not awesome" }</span> 
+            ? <span><code>{JSON.stringify(this.numericTriplet())}</code> { this.currentTripletIsAwesome() ? "is AWESOME!" : "is not awesome" }</span> 
             : [
+                this.state.triplet.map((value, index) => 
+                    <input name={`t${index}`} 
+                    value={value} 
+                    onChange={e => this.handleChange(e, index)}
+                    />
+                ),
                 <button onClick={this.testTriplet} disabled={!this.isWellFormed()}>Test</button>,
                 <button onClick={this.props.onHavingEnough}>I've had enough</button>
             ]}
