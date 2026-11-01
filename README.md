@@ -1,68 +1,39 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 2-4-6
 
-## Available Scripts
+An interactive version of Peter Wason's 1960 rule-discovery experiment, live at
+<https://sortega.github.io/problem246/>.
 
-In the project directory, you can run:
+You get the triple **2, 4, 6** and are told it follows a rule. You test triples of your own until you're sure you
+know the rule, write it down, and answer a short quiz. Most people settle on a rule that is too specific, because
+they only test triples they expect to pass.
 
-### `npm start`
+## What's different from the classic version
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The quiz isn't fixed. The app keeps a family of plausible rules (`src/engine/hypotheses.ts`), many of them taken
+from the wrong answers Wason's subjects gave. It then:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+1. removes every rule your own tests have already contradicted,
+2. weights the rest by how well they explain the triples you *chose* to test. People tend to test cases they expect
+   to fit (Klayman & Ha, 1987), so narrow rules that fit all your tests get the most weight,
+3. greedily picks quiz triples that separate the likeliest of those rules from the real one, and
+4. after the quiz, reports which rule your answers match and shows the triple that would have proved it wrong.
 
-### `npm test`
+If you get it wrong, you're told how many answers were wrong (not which ones) and can keep experimenting, as in
+Wason's original procedure.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Development
 
-### `npm run build`
+```sh
+npm install
+npm run dev      # http://localhost:5173/problem246/
+npm test         # engine unit tests
+npm run lint
+npm run build
+```
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Pushing to `master` deploys to GitHub Pages through `.github/workflows/deploy.yml`.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## Credits
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- P. C. Wason (1960), *On the failure to eliminate hypotheses in a conceptual task*, QJEP 12(3), 129–140.
+- Based on MBlume's C++ program, found on [LessWrong](https://www.lesswrong.com/w/positive-bias).
